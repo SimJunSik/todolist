@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- import jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- import js -->
+    <script src="/static/js/modifyItem.js" async></script>
+    <!-- import css -->
+    <link rel="stylesheet" href="/static/css/modifyItem.css">
+
+    
+</head>
+<body>
+    <div class="top">
+        <div class="top-title">
+            <div class="top-title_text">{{user.username}}'s To-Do List</div>
+        </div>
+        <div class="top-notification" onclick="toggle_notification();">
+            {% if user.notifications.all.count > 0 %}
+                <img src="/static/image/notification_icon.png" class="top-notification_image top-notification_imageshake">
+                <div class="top-notification-count">{{user.notifications.all.count}}</div>
+            {% else %}
+                <img src="/static/image/notification_icon.png" class="top-notification_image">
+            {% endif %}
+        </div>
+    </div>
+    <div class="middle">
+        <div class="middle-menu">
+            <div class="middle-menu-item-wraaper">
+                <button class="middle-menu-item_button">
+                    <a href="/add_item/">
+                        ADD TASK
+                    </a>
+                </button>
+                <button class="middle-menu-item_button">
+                    <a href="/show_list/">
+                        SHOW LIST
+                    </a>
+                </button>
+            </div>
+        </div>
+        <div class="middle-content">
+            <form class="middle-content-form" method="POST" action="/modify_item/{{todoitem.id}}/">
+                {% csrf_token %}
+                <div class="middle-content-form-input-titlewrapper">
+                    <div class="middle-content-form-input-name">
+                        <div class="middle-content-form-input-name_text">
+                            제목
+                        </div>
+                    </div>
+                    <div class="middle-content-form-inputwrapper">
+                        <input type="text" name="title" class="middle-content-form-input" value="{{todoitem.title}}" maxlength="20" required>
+                    </div>
+                </div>
+                <div class="middle-content-form-input-detailwrapper">
+                    <div class="middle-content-form-input-name">
+                        <div class="middle-content-form-input-name_text">
+                            내용
+                        </div>
+                    </div>
+                    <div class="middle-content-form-inputwrapper">
+                        <input type="text" name="content" class="middle-content-form-input" value="{{todoitem.content}}" maxlength="100" required>
+                    </div>
+                </div>
+                <div class="middle-content-form-input-gradewrapper">
+                    <div class="middle-content-form-input-name">
+                        <div class="middle-content-form-input-name_text">
+                            우선순위
+                        </div>
+                    </div>
+                    <div class="middle-content-form-inputwrapper">
+                        <div class="middle-content-form-grade-selectwrapper">
+                            <div class="middle-content-form-grade_radiogroup">
+                                <input type="text" id="prev_grade" value={{todoitem.grade}} hidden>
+                                <input type="radio" name="grade" value="1" />중요
+                                <br>
+                                <input type="radio" name="grade" value="2" />보통
+                                <br>
+                                <input type="radio" name="grade" value="3" />사소
+                            </div>
+                            <div class="middle-content-form-grade-colorwrapper">
+                                <div class="middle-content-form-grade_color"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle-content-form-input-deadlinewrapper">
+                    <div class="middle-content-form-input-name">
+                        <div class="middle-content-form-input-name_text">
+                            마감기한
+                        </div>
+                    </div>
+                    <div class="middle-content-form-inputwrapper">
+                        <input type="date" 
+                                name="deadline" 
+                                id="deadline" 
+                                class="middle-content-form-input" 
+                                style="width: 30%;"
+                                value="{{todoitem.deadline|date:'Y-m-d'}}">
+                    </div>
+                </div>
+                <button type="submit" class="middle-content-form_submitbutton">등록</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="notification" data-notification-state="closed">
+        {% for notification in notifications %}
+            <div class="notification-item">
+                <!-- <div class="notification-item-grade">
+                    <div class="notification-item-grade_color"></div>
+                </div> -->
+                <div class="notification-item-content">
+                    <div class="notification-item-content_text">
+                        {{notification.content}}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

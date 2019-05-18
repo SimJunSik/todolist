@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- import jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- import js -->
+    <script src="/static/js/index.js" async></script>
+    <!-- import css -->
+    <link rel="stylesheet" href="/static/css/index.css">
+    
+</head>
+<body>
+    <div class="top">
+        <div class="top-title">
+            <div class="top-title_text">{{user.username}}'s To-Do List</div>
+        </div>
+        <div class="top-notification" onclick="toggle_notification();">
+            {% if user.notifications.all.count > 0 %}
+                <img src="/static/image/notification_icon.png" class="top-notification_image top-notification_imageshake">
+                <div class="top-notification-count">{{user.notifications.all.count}}</div>
+            {% else %}
+                <img src="/static/image/notification_icon.png" class="top-notification_image">
+            {% endif %}
+        </div>
+    </div>
+    <div class="middle">
+        <div class="middle-menu">
+            <div class="middle-menu-item-wraaper">
+                <button class="middle-menu-item_button">
+                    <a href="/add_item/">
+                        ADD TASK
+                    </a>
+                </button>
+                <button class="middle-menu-item_button">
+                    <a href="/show_list/">
+                        SHOW LIST
+                    </a>
+                </button>
+            </div>
+            <div class="middle-menu-item-colorindex">
+                <div class="middle-menu-item-colorindex_item">
+                    <div class="middle-menu-item-colorindex_color" style="background-color: red;">
+
+                    </div>
+                    <div class="middle-menu-item-colorindex_text">
+                        긴급
+                    </div>
+                </div>
+                <div class="middle-menu-item-colorindex_item">
+                    <div class="middle-menu-item-colorindex_color" style="background-color: yellow;">
+
+                    </div>
+                    <div class="middle-menu-item-colorindex_text">
+                        보통
+                    </div>
+                </div>
+                <div class="middle-menu-item-colorindex_item">
+                    <div class="middle-menu-item-colorindex_color" style="background-color: green;">
+
+                    </div>
+                    <div class="middle-menu-item-colorindex_text">
+                        사소
+                    </div>
+                </div>
+                <div class="middle-menu-item-colorindex_item">
+                    <div class="middle-menu-item-colorindex_color" style="background-color: gray;">
+
+                    </div>
+                    <div class="middle-menu-item-colorindex_text">
+                        완료
+                    </div>
+                </div>
+                <div class="middle-menu-item-colorindex_item">
+                    <div class="middle-menu-item-colorindex_color" style="background-color: black;">
+
+                    </div>
+                    <div class="middle-menu-item-colorindex_text">
+                        마감기한 지남
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="middle-content">
+            <div class="middle-content-deadlinelist">
+                <div class="middle-content-listtitle-wrapper">
+                    <div class="middle-content-listtitle">
+                        <div class="middle-content-listtitle_text">
+                            마감이 있는 To-Do <button class="middle-content_togglebutton" id="deadline_togglebutton" onclick="toggle_deadlinelist(this);" data-deadline-toggle="open"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle-content-listitem-wrapper" id="deadline-list">
+                    {% for deadline_item in deadline_items %}
+                        <div class="middle-content-listitem" id="{{deadline_item.id}}">
+                            <div class="middle-content-listitem-titlewrapper">
+                                <div class="middle-content-listitem-grade">
+                                    {% if deadline_item.is_finished == True %}
+                                        <div class="middle-content-listlitem-grade_color" id="grade_color_{{deadline_item.id}}" data-deadline-grade-color="gray" style="background-color: gray;">
+        
+                                        </div>
+                                    {% else %}
+                                        {% if deadline_item.d_day_count <= 0 %}
+                                            <input type="text" id="grade_{{deadline_item.id}}" value={{deadline_item.grade}} hidden>
+                                            {% if deadline_item.grade == '1' %}
+                                                <div class="middle-content-listlitem-grade_color" id="grade_color_{{deadline_item.id}}" data-deadline-grade-color="red" style="background-color: red;">
+                
+                                                </div>
+                                            {% elif deadline_item.grade == '2' %}
+                                                <div class="middle-content-listlitem-grade_color" id="grade_color_{{deadline_item.id}}" data-deadline-grade-color="yellow" style="background-color: yellow;">
+                
+                                                </div>
+                                            {% elif deadline_item.grade == '3' %}
+                                                <div class="middle-content-listlitem-grade_color" id="grade_color_{{deadline_item.id}}" data-deadline-grade-color="green" style="background-color: green;">
+                
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            <input type="text" id="grade_{{deadline_item.id}}" value='overdue' hidden>
+                                            <div class="middle-content-listlitem-grade_color" id="grade_color_{{deadline_item.id}}" data-deadline-grade-color="green" style="background-color: black;">
+                
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="middle-content-listitem-title">
+                                    {% if deadline_item.is_finished == False %}
+                                    <div class="middle-content-listitem-title_text" id="deadline_title_{{deadline_item.id}}">
+                                        {{deadline_item.title}}
+                                    </div>
+                                    {% else %}
+                                    <div class="middle-content-listitem-title_text" id="deadline_title_{{deadline_item.id}}" style="text-decoration : line-through">
+                                        {{deadline_item.title}}
+                                    </div>
+                                    {% endif %}
+                                    <div class="middle-content-listitem-title-detailwrapper">
+                                        <button type="button" 
+                                                class="middle-content-listitem_detailbutton" 
+                                                id="detailbutton_{{deadline_item.id}}"
+                                                data-detail-toggle="closed"
+                                                onclick="toggle_detail(this);">
+                                    
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="middle-content-listitem-checkwrapper">
+                                {% if deadline_item.is_finished == True %}
+                                <input type="checkbox" id="deadline_checkbox_{{deadline_item.id}}" class="middle-content-listitem-checkbox" checked>
+                                {% else %}
+                                <input type="checkbox" id="deadline_checkbox_{{deadline_item.id}}" class="middle-content-listitem-checkbox">
+                                {% endif %}
+                            </div>
+                            <div class="middle-content-listitem-dday">
+                                <div class="middle-content-listitem-dday_text">
+                                    {% if deadline_item.d_day_count > 0 %}
+                                        <span>D+{{deadline_item.d_day_count}}</span>
+                                    {% elif deadline_item.d_day_count < 0 %}
+                                        <span>D{{deadline_item.d_day_count}}</span>
+                                    {% elif deadline_item.d_day_count == 0 %}
+                                        <span style="color: red;">D-Day</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="middle-content-listitem-detail" id="detail_{{deadline_item.id}}">
+                            <div class="middle-content-listitem-detail_text">
+                                {{deadline_item.content}}
+                            </div>
+                            <div class="middle-content-listitem-modifywrapper">
+                                <a href="/modify_item/{{deadline_item.id}}/">
+                                    <button type="button" 
+                                            class="middle-content-listitem_modifybutton"
+                                            id="deadline_modifybutton_{{deadline_item.id}}"
+                                            >
+                                    
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="middle-content-listitem-deletewrapper">
+                                <button type="button" 
+                                        class="middle-content-listitem_deletebutton" 
+                                        id="deadline_deletebutton_{{deadline_item.id}}"
+                                        onclick="check_delete_listitem(this);">  
+                                
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            
+            <div class="middle-content-normallist">
+                <div class="middle-content-listtitle-wrapper">
+                    <div class="middle-content-listtitle">
+                        <div class="middle-content-listtitle_text">
+                            To-Do <button class="middle-content_togglebutton" id="normal_togglebutton" onclick="toggle_normallist(this);" data-normal-toggle="open"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle-content-listitem-wrapper" id="normal-list">
+                    {% for normal_item in normal_items %}
+                        <div class="middle-content-listitem"  id="{{normal_item.id}}">
+                            <div class="middle-content-listitem-titlewrapper">
+                                <div class="middle-content-listitem-grade">
+                                    <input type="text" id="grade_{{normal_item.id}}" value={{normal_item.grade}} hidden>
+                                    {% if normal_item.is_finished == 'True' %}
+                                        <div class="middle-content-listlitem-grade_color" id="grade_color_{{normal_item.id}}" data-normal-grade-color="gray" style="background-color: gray;">
+        
+                                        </div>
+                                    {% else %}
+                                        {% if normal_item.grade == '1' %}
+                                            <div class="middle-content-listlitem-grade_color" id="grade_color_{{normal_item.id}}" data-normal-grade-color="red" style="background-color: red;">
+                
+                                            </div>
+                                        {% elif normal_item.grade == '2' %}
+                                            <div class="middle-content-listlitem-grade_color" id="grade_color_{{normal_item.id}}" data-normal-grade-color="yellow" style="background-color: yellow;">
+                                            
+                                            </div>
+                                        {% elif normal_item.grade == '3' %}
+                                            <div class="middle-content-listlitem-grade_color" id="grade_color_{{normal_item.id}}" data-normal-grade-color="green" style="background-color: green;">
+                                                
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="middle-content-listitem-title">
+                                    {% if normal_item.is_finished == False %}
+                                    <div class="middle-content-listitem-title_text" id="normal_title_{{normal_item.id}}">
+                                        {{normal_item.title}}
+                                    </div>
+                                    {% else %}
+                                    <div class="middle-content-listitem-title_text" id="normal_title_{{normal_item.id}}" style="text-decoration : line-through;">
+                                        {{normal_item.title}}
+                                    </div>
+                                    {% endif %}
+                                    <div class="middle-content-listitem-title-detailwrapper">
+                                        <button type="button" 
+                                                class="middle-content-listitem_detailbutton" 
+                                                id="detailbutton_{{normal_item.id}}"
+                                                data-detail-toggle="closed"
+                                                onclick="toggle_detail(this);">
+                                    
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="middle-content-listitem-checkwrapper">
+                                {% if normal_item.is_finished == True %}
+                                <input type="checkbox" id="normal_checkbox_{{normal_item.id}}" class="middle-content-listitem-checkbox" checked>
+                                {% else %}
+                                <input type="checkbox" id="normal_checkbox_{{normal_item.id}}" class="middle-content-listitem-checkbox">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="middle-content-listitem-detail" id="detail_{{normal_item.id}}">
+                            <div class="middle-content-listitem-detail_text">
+                                {{normal_item.content}}
+                            </div>
+                            <div class="middle-content-listitem-modifywrapper">
+                                <a href="/modify_item/{{normal_item.id}}/">
+                                    <button type="button" 
+                                            class="middle-content-listitem_modifybutton"
+                                            id="normal_modifybutton_{{normal_item.id}}"
+                                            >
+                                    
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="middle-content-listitem-deletewrapper">
+                                <button type="button" 
+                                        class="middle-content-listitem_deletebutton" 
+                                        id="normal_deletebutton_{{normal_item.id}}"
+                                        onclick="check_delete_listitem(this);">  
+                                
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mask"></div>
+
+    <div class="check-delete">
+        <div class="check-delete-textwrapper">
+            <span class="check-delete-content" data-listitem-id=""></span>
+            <br>
+            를 정말 삭제 하시겠습니까?
+        </div>
+        <div class="check-delete-buttonwrapper">
+            <button type="button" id="check-delete_ok" class="check-delete_button" onclick="delete_listitem();">
+                확인
+            </button>
+            <button type="button" id="check-delete_cancel" class="check-delete_button">
+                취소
+            </button>
+        </div>
+    </div>
+
+    <div class="notification" data-notification-state="closed">
+        {% for notification in notifications %}
+            <div class="notification-item">
+                <!-- <div class="notification-item-grade">
+                    <div class="notification-item-grade_color"></div>
+                </div> -->
+                <div class="notification-item-content">
+                    <div class="notification-item-content_text">
+                        {{notification.content}}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
