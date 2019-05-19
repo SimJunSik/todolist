@@ -22,6 +22,8 @@ $(document).ready(function(){
             grade_color = 'black';
         }
 
+        // console.log(grade_color);
+
         // 완료처리
         if($("#" + this.id).is(":checked")){
             // alert("체크박스 체크 했음!");
@@ -31,7 +33,7 @@ $(document).ready(function(){
             fetch("/finish_todoitem/" + item_id + "/")
                 .then(e => e.json())
                 .then(e => {
-                    console.log(e);
+                    // console.log(e);
                     if(e.result == 'failed'){
                         alert("항목 체크에 실패했습니다.");
                     }
@@ -49,7 +51,7 @@ $(document).ready(function(){
             fetch("/unfinish_todoitem/" + item_id + "/")
                 .then(e => e.json())
                 .then(e => {
-                    console.log(e);
+                    // console.log(e);
                     if(e.result == 'failed'){
                         alert("항목 체크에 실패했습니다.");
                     }

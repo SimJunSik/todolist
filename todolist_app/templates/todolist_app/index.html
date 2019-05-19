@@ -100,8 +100,13 @@
                             <div class="middle-content-listitem-titlewrapper">
                                 <div class="middle-content-listitem-grade">
                                     {% if deadline_item.is_finished == True %}
+                                        {% if deadline_item.d_day_count <= 0 %}
+                                            <input type="text" id="grade_{{deadline_item.id}}" value={{deadline_item.grade}} hidden>
+                                        {% else %}
+                                            <input type="text" id="grade_{{deadline_item.id}}" value='overdue' hidden>
+                                        {% endif %}
                                         <div class="middle-content-listlitem-grade_color" id="grade_color_{{deadline_item.id}}" data-deadline-grade-color="gray" style="background-color: gray;">
-        
+            
                                         </div>
                                     {% else %}
                                         {% if deadline_item.d_day_count <= 0 %}
@@ -209,7 +214,7 @@
                             <div class="middle-content-listitem-titlewrapper">
                                 <div class="middle-content-listitem-grade">
                                     <input type="text" id="grade_{{normal_item.id}}" value={{normal_item.grade}} hidden>
-                                    {% if normal_item.is_finished == 'True' %}
+                                    {% if normal_item.is_finished == True %}
                                         <div class="middle-content-listlitem-grade_color" id="grade_color_{{normal_item.id}}" data-normal-grade-color="gray" style="background-color: gray;">
         
                                         </div>
