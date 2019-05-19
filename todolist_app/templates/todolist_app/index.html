@@ -307,13 +307,18 @@
 
     <div class="notification" data-notification-state="closed">
         {% for notification in notifications %}
-            <div class="notification-item">
+            <div class="notification-item" id="notification_{{notification.id}}">
                 <!-- <div class="notification-item-grade">
                     <div class="notification-item-grade_color"></div>
                 </div> -->
                 <div class="notification-item-content">
                     <div class="notification-item-content_text">
                         {{notification.content}}
+                    </div>
+                </div>
+                <div class="notification-item-delete">
+                    <div class="notification-item-delete_icon" id="notification_delete_{{notification.id}}" onclick="delete_notification(this);">
+                        X
                     </div>
                 </div>
             </div>

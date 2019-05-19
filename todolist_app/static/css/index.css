@@ -88,9 +88,10 @@ a{
     margin-bottom: 1%;
 }
 .notification-item-content{
-    width: 100%;
+    width: 90%;
     height: 100%;
     position: relative;
+    float: left;
 }
 .notification-item-content_text{
     width: 100%;
@@ -98,6 +99,23 @@ a{
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+}
+.notification-item-delete{
+    width: 10%;
+    height: 100%;
+    position: relative;
+    float: left;
+}
+.notification-item-delete_icon{
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 /* top css */

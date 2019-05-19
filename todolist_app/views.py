@@ -34,6 +34,7 @@ def index(request) :
                     new_notification = Notification.objects.create(
                         content = content,
                         owner = user,
+                        todoitem = deadline_item,
                     )
 
         notifications = user.notifications.all()
@@ -150,7 +151,7 @@ def delete_todoitem(request, todoitem_id) :
 
     except :
 
-        result = { "result" : "failed"}
+        result = { "result" : "failed" }
 
     return JsonResponse(result)
 
@@ -185,6 +186,21 @@ def unfinish_todoitem(request, todoitem_id) :
         todoitem.save()
 
         print(todoitem)
+
+        result = { "result" : "success" }
+
+    except :
+
+        result = { "result" : "failed" }
+
+    return JsonResponse(result)
+
+
+def delete_notification(request, notification_id) :
+
+    try :
+        notification = Notification.objects.get(id=notification_id)
+        notification.delete()
 
         result = { "result" : "success" }
 

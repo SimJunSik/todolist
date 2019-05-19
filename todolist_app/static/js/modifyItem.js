@@ -48,5 +48,24 @@ const toggle_notification = () =>{
             'right' : '0%'
         });
         $(".notification").data('notificationState','open');
+        $(".top-notification-count").hide();
+        $(".top-notification_image").removeClass("top-notification_imageshake");
     }
 };
+
+// 알림 삭제
+const delete_notification = (notification) =>{
+    const notification_id = notification.id.split('_')[2];
+
+    fetch('/delete_notification/' + notification_id + '/')
+        .then(e => e.json())
+        .then(e => {
+            console.log(e);
+            if(e.result == 'success'){
+                $("#notification_" + notification_id).remove();
+            }
+            else if(e.result == 'failed'){
+                alert("알림 삭제 실패");
+            }
+        });
+}

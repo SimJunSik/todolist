@@ -49,6 +49,7 @@ class Notification(models.Model) :
     content = models.CharField(max_length = 255, default = '')
     owner = models.ForeignKey(User, on_delete = models.CASCADE, null = True, blank = True, related_name='notifications')
     created_at = models.DateTimeField(auto_now_add=True)
+    todoitem = models.ForeignKey(TodoItem, on_delete = models.CASCADE, null = True, blank = True, related_name='todoitem_notifications')
 
     def __str__(self) :
 

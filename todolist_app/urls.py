@@ -11,4 +11,6 @@ urlpatterns = [
     path('delete_todoitem/<int:todoitem_id>/', views.delete_todoitem),
     path('finish_todoitem/<int:todoitem_id>/', views.finish_todoitem),
     path('unfinish_todoitem/<int:todoitem_id>/', views.unfinish_todoitem),
+
+    path('delete_notification/<int:notification_id>/', views.delete_notification),
 ]
