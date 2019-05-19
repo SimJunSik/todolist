@@ -187,9 +187,9 @@ const delete_listitem = () =>{
         });
 };
 
-// 
+// 삭제 확인창 value setting
 const check_delete_listitem = (btn) =>{
-    // console.log(btn.id);
+    console.log(btn.id);
 
     const replace_id = btn.id.replace("deletebutton", "title");
 
@@ -198,11 +198,11 @@ const check_delete_listitem = (btn) =>{
     const title = $("#" + replace_id).html().trim();
 
     // console.log(title);
-
+    // console.log($(".check-delete-content").data('listitemId'));
     $(".check-delete-content").html(title);
-    $(".check-delete-content").attr({
-        'data-listitem-id' : btn.id
-    });
+    $(".check-delete-content").data(
+        'listitemId' , btn.id
+    );
     // console.log($(".check-delete-content").data('listitemId'));
 };
 
