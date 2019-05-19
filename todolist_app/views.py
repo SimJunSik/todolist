@@ -27,7 +27,7 @@ def index(request) :
                 deadline_item.save()
 
                 if (deadline_item.is_finished == False) :
-                    content = deadline_item.title + ' 일정 마감기한이 지났습니다.'
+                    content = '[' + deadline_item.title + ']' + ' 마감기한이 지났습니다.'
                     new_notification = Notification.objects.create(
                         content = content,
                         owner = user,
