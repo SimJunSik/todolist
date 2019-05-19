@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
+from django.utils import timezone
+from django.conf import settings
 
 class User(AbstractUser) :
 
@@ -33,11 +35,10 @@ class TodoItem(models.Model) :
     @property
     def d_day_count(self) :
 
-        time_now = datetime.datetime.now()
-        d_day = (time_now - self.deadline.replace(tzinfo=None)).days
+        time_now = timezone.now()
+        d_day = (time_now - self.deadline).days
 
         return d_day
-
 
     class Meta :
 

@@ -1,11 +1,9 @@
 from django.shortcuts import render
-import datetime
 from .models import *
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 
-# Create your views here.
 def index(request) :
 
     # user = request.user
@@ -15,8 +13,7 @@ def index(request) :
 
     if not user.is_anonymous : 
 
-        time_now = datetime.datetime.now()
-        # print(time_now)
+        # print(timezone.now())
 
         deadline_items = TodoItem.objects.filter(deadline__isnull=False, owner=user)
 
@@ -24,7 +21,7 @@ def index(request) :
 
 
         for deadline_item in deadline_items :
-            print(deadline_item.title, deadline_item.is_finished)
+
             if (deadline_item.d_day_count > 0) and (deadline_item.is_overdue == False) :
                 deadline_item.is_overdue = True
                 deadline_item.save()
@@ -73,7 +70,7 @@ def add_item(request) :
             grade = request.POST['grade']
             deadline = request.POST['deadline']
 
-            print(title, content, grade, deadline)
+            # print(title, content, grade, deadline)
 
             if not deadline :
                 deadline = None
@@ -106,8 +103,6 @@ def modify_item(request, todoitem_id) :
 
             todoitem = TodoItem.objects.get(id=todoitem_id)
 
-            print("modi", todoitem.deadline)
-
             context = { "user" : user, "todoitem" : todoitem , 'notifications' : notifications }
 
             return render(request, 'todolist_app/modifyItem.html', context)
@@ -121,7 +116,7 @@ def modify_item(request, todoitem_id) :
             grade = request.POST['grade']
             deadline = request.POST['deadline']
 
-            print(title, content, grade, deadline)
+            # print(title, content, grade, deadline)
 
             if not deadline :
                 deadline = None
@@ -139,13 +134,13 @@ def modify_item(request, todoitem_id) :
 
 def delete_todoitem(request, todoitem_id) :
 
-    print(todoitem_id)
+    # print(todoitem_id)
 
     try :
         todoitem = TodoItem.objects.get(id=todoitem_id)
         todoitem.delete()
 
-        print(todoitem)
+        # print(todoitem)
 
         result = { "result" : "success" }
 
@@ -158,14 +153,14 @@ def delete_todoitem(request, todoitem_id) :
 
 def finish_todoitem(request, todoitem_id) :
 
-    print(todoitem_id)
+    # print(todoitem_id)
 
     try :
         todoitem = TodoItem.objects.get(id=todoitem_id)
         todoitem.is_finished = True
         todoitem.save()
 
-        print(todoitem)
+        # print(todoitem)
 
         result = { "result" : "success" }
 
@@ -178,14 +173,14 @@ def finish_todoitem(request, todoitem_id) :
 
 def unfinish_todoitem(request, todoitem_id) :
 
-    print(todoitem_id)
+    # print(todoitem_id)
 
     try :
         todoitem = TodoItem.objects.get(id=todoitem_id)
         todoitem.is_finished = False
         todoitem.save()
 
-        print(todoitem)
+        # print(todoitem)
 
         result = { "result" : "success" }
 
